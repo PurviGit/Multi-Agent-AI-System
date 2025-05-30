@@ -1,44 +1,139 @@
 # Multi-Agent AI System
 
-## Objective
+## 🎯 Objective
 
-A multi-agent AI system that accepts input in PDF, JSON, or Email (text) format, classifies the format and intent, and routes it to the appropriate agent. The system maintains shared context (e.g., sender, topic, last extracted fields) to enable chaining and traceability.
+Build a multi-agent AI system that:
 
----
-
-## Agents Overview
-
-### 1. Classifier Agent
-
-- **Input:** Raw file (PDF, JSON, or Email text file)
-- **Function:** Classifies format and intent, routes to appropriate agent, logs to shared memory
-
-### 2. JSON Agent
-
-- **Input:** JSON payload
-- **Function:** Extracts and validates fields, flags missing data, reformats for storage
-
-### 3. Email Agent
-
-- **Input:** Plain text email
-- **Function:** Extracts sender, intent, urgency, and formats into CRM-style logs
-
-### Shared Memory Module
-
-- Stores:
-  - File source, type, timestamp
-  - Extracted values
-  - Agent outputs
-  - Conversation/thread ID (if extended)
+* Accepts input in **PDF, JSON, or Email (text)** format
+* Classifies the **format and intent**
+* Routes it to the **appropriate agent**
+* Maintains a shared memory for context, chaining, and traceability
 
 ---
 
-## Tech Stack
+## 🧠 Architecture Overview
 
-- Python 3.8+
-- LLM-ready design (optional)
-- In-memory shared store (no DB needed)
+### 🧭 Classifier Agent
+
+* **Input**: Raw file (email, JSON, or PDF)
+* **Detects**: Format + Intent (Invoice, RFQ, Complaint, etc.)
+* **Routes**: Sends data to Email Agent or JSON Agent
+* **Logs**: Format and intent into Shared Memory
+
+### 💾 Shared Memory Module
+
+* Stores:
+
+  * Source, format, intent, timestamp
+  * Agent output and extracted values
+* Implemented using an in-memory Python list (can be upgraded to Redis or SQLite)
+
+### 📄 JSON Agent
+
+* Accepts structured JSON payloads
+* Extracts data into a unified schema
+* Flags missing or anomalous fields
+
+### 📧 Email Agent
+
+* Parses raw email content
+* Extracts sender, urgency, intent
+* Formats data for CRM-like usage
 
 ---
 
-## Project Structure
+## 🗂 Folder Structure
+
+```
+├── classifier_agent
+│   └── classifier.py
+├── email_agent
+│   └── email_agent.py
+├── json_agent
+│   └── json_agent.py
+├── shared_memory
+│   └── memory.py
+├── samples
+│   ├── invoice_sample.json
+│   └── email_sample.txt
+├── main.py
+├── README.md
+```
+
+---
+
+## 🚀 How to Run
+
+```bash
+python main.py
+```
+
+---
+
+## ✅ Sample Output
+
+```
+[LOGGED] {'source': 'samples/email_sample.txt', 'format': 'Email', 'intent': 'RFQ'}
+[EmailAgent] Processed Data: CRM_LOG | From: sales@acme.com | Intent: RFQ | Urgency: High
+[LOGGED] {'agent': 'EmailAgent', 'output': {...}}
+
+[LOGGED] {'source': 'samples/invoice_sample.json', 'format': 'JSON', 'intent': 'Invoice'}
+[JSONAgent] Processed Data: {
+  "invoice_id": "INV-2025-001",
+  "customer": "ACME Corp",
+  "amount": 1250.75,
+  "status": "complete",
+  "missing_fields": []
+}
+[LOGGED] {'agent': 'JSONAgent', 'output': {...}}
+```
+
+---
+
+## 📁 Sample Input Files
+
+### 🔹 `samples/email_sample.txt`
+
+```
+From: sales@acme.com
+Subject: Urgent RFQ
+
+Hi Team,
+Please provide a quote for 500 units of product X.
+Regards,
+ACME Corp
+```
+
+### 🔹 `samples/invoice_sample.json`
+
+```json
+{
+  "invoice_id": "INV-2025-001",
+  "customer": "ACME Corp",
+  "amount": 1250.75,
+  "status": "complete"
+}
+```
+
+---
+
+## 📸 Screenshots 
+
+
+![Screenshot 2025-05-30 183836](https://github.com/user-attachments/assets/76f7bb07-b8d9-42df-b7fa-7356416fe534)
+
+---
+
+## 📹 Submission Checklist
+
+* [x] Working code with agents and memory
+* [x] `samples/` folder with test files
+* [x] `main.py` to demonstrate full pipeline
+* [x] README.md with instructions and logs
+
+---
+
+
+## 🧑‍💻 Author
+
+**Purvi** – Multi-Agent AI System Developer
